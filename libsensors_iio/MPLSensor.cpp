@@ -1974,7 +1974,7 @@ int MPLSensor::readEvents(sensors_event_t *data, int count) {
         *((short *) (rdata + 2 + ((mLocalSensorMask & INV_THREE_AXIS_GYRO)? 6: 0))),
         *((short *) (rdata + 4) + ((mLocalSensorMask & INV_THREE_AXIS_GYRO)? 6: 0)));
 
-    LOGI_IF(mLocalSensorMask & INV_THREE_AXIS_COMPASS &
+    LOGI_IF(mLocalSensorMask & INV_THREE_AXIS_COMPASS &&
         mCompassSensor->isIntegrated(), "compass x/y/z: %d/%d/%d",
         *((short *) (rdata + 0 + ((mLocalSensorMask & INV_THREE_AXIS_GYRO)? 6: 0) +
             ((mLocalSensorMask & INV_THREE_AXIS_ACCEL)? 6: 0))),
