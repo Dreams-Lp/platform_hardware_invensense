@@ -705,13 +705,13 @@ MPLSensor::~MPLSensor()
 #endif
 }
 
-#define GY_ENABLED (((1 << ID_GY) | (1 << ID_RG)) & enabled_sensors)
-#define A_ENABLED  ((1 << ID_A)  & enabled_sensors)
-#define M_ENABLED  ((1 << ID_M)  & enabled_sensors)
-#define O_ENABLED  ((1 << ID_O)  & enabled_sensors)
-#define LA_ENABLED ((1 << ID_LA) & enabled_sensors)
-#define GR_ENABLED ((1 << ID_GR) & enabled_sensors)
-#define RV_ENABLED ((1 << ID_RV) & enabled_sensors)
+#define GY_ENABLED (((1 << Gyro) | (1 << RawGyro)) & enabled_sensors)
+#define A_ENABLED  ((1 << Accelerometer) & enabled_sensors)
+#define M_ENABLED  ((1 << MagneticField) & enabled_sensors)
+#define O_ENABLED  ((1 << Orientation) & enabled_sensors)
+#define LA_ENABLED ((1 << LinearAccel) & enabled_sensors)
+#define GR_ENABLED ((1 << Gravity) & enabled_sensors)
+#define RV_ENABLED ((1 << RotationVector) & enabled_sensors)
 
 /* TODO: this step is optional, remove?  */
 int MPLSensor::setGyroInitialState()
