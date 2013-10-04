@@ -15,8 +15,6 @@
 
 LOCAL_PATH := $(call my-dir)
 
-ifneq ($(TARGET_SIMULATOR),true)
-
 # InvenSense fragment of the HAL
 include $(CLEAR_VARS)
 
@@ -86,15 +84,49 @@ LOCAL_MODULE_PATH := $(TARGET_OUT)/lib
 OVERRIDE_BUILT_MODULE_PATH := $(TARGET_OUT_INTERMEDIATE_LIBRARIES)
 include $(BUILD_PREBUILT)
 
+# Build libmllite from source
+
+MLLITE_DIR := $(LOCAL_PATH)/software/core/mllite
+
+libmllite_src_files := \
+    $(MLLITE_DIR)/data_builder.c \
+    $(MLLITE_DIR)/hal_outputs.c \
+    $(MLLITE_DIR)/message_layer.c \
+    $(MLLITE_DIR)/ml_math_func.c \
+    $(MLLITE_DIR)/mpl.c \
+    $(MLLITE_DIR)/results_holder.c \
+    $(MLLITE_DIR)/start_manager.c \
+    $(MLLITE_DIR)/storage_manager.c \
+    $(MLLITE_DIR)/linux/mlos_linux.c \
+    $(MLLITE_DIR)/linux/ml_stored_data.c \
+    $(MLLITE_DIR)/linux/ml_load_dmp.c \
+    $(MLLITE_DIR)/linux/ml_sysfs_helper.c
+
+libmllite_includes := \
+    $(MLLITE_DIR) \
+    $(MLLITE_DIR)/linux
+
+libmllite_cflags := \
+    -DNDEBUG \
+    -D_REENTRANT \
+    -DANDROID \
+    -DANDROID_JELLYBEAN \
+    -DLINUX
+
 include $(CLEAR_VARS)
 LOCAL_MODULE := libmllite
-LOCAL_SRC_FILES := libmllite.so
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_OWNER := invensense
-LOCAL_MODULE_SUFFIX := .so
-LOCAL_MODULE_CLASS := SHARED_LIBRARIES
-LOCAL_MODULE_PATH := $(TARGET_OUT)/lib
-OVERRIDE_BUILT_MODULE_PATH := $(TARGET_OUT_INTERMEDIATE_LIBRARIES)
-include $(BUILD_PREBUILT)
+LOCAL_C_INCLUDES := $(libmllite_includes)
+LOCAL_CFLAGS += $(libmllite_cflags)
+LOCAL_SRC_FILES := $(libmllite_cflags)
+include $(BUILD_SHARED_LIBRARY)
 
-endif # !TARGET_SIMULATOR
+include $(CLEAR_VARS)
+LOCAL_MODULE := libmllite
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_OWNER := invensense
+LOCAL_C_INCLUDES := $(libmllite_includes)
+LOCAL_CFLAGS += $(libmllite_cflags)
+LOCAL_SRC_FILES := $(libmllite_cflags)
+include $(BUILD_STATIC_LIBRARY)
