@@ -181,20 +181,14 @@ void PressureSensor::fillList(struct sensor_t *list)
 int PressureSensor::inv_init_sysfs_attributes(void)
 {
     VFUNC_LOG;
- 
-    pathP = (char*)malloc(sizeof(char[PRESSURE_MAX_SYSFS_ATTRB][MAX_SYSFS_NAME_LEN]));
-    char *sptr = pathP;
-    char **dptr = (char**)&pressureSysFs;
-    if (sptr == NULL)
+
+    pathP = (char*)calloc(PRESSURE_MAX_SYSFS_ATTRB,
+                          sizeof(char[MAX_SYSFS_NAME_LEN]));
+    if (pathP == NULL)
         return -1;
-    unsigned char i = 0;
-    do {
-        *dptr++ = sptr;
-        memset(sptr, 0, sizeof(sptr));
-        sptr += sizeof(char[MAX_SYSFS_NAME_LEN]);
-    } while (++i < PRESSURE_MAX_SYSFS_ATTRB);
- 
+
     sprintf(pressureSysFs.pressure_enable, "%s%s", mSysfsPath, "/pressure_enable");
     sprintf(pressureSysFs.pressure_rate, "%s%s", mSysfsPath, "/pressure_rate");
+
     return 0;
 }
