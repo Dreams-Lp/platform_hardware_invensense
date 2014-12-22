@@ -239,7 +239,7 @@ int CompassSensor::readSample(long *data, int64_t *timestamp)
 {
     VHANDLER_LOG;
 
-    int numEventReceived = 0, done = 0;
+    int done = 0;
 
     ssize_t n = mCompassInputReader.fill(compass_fd);
     if (n < 0) {
@@ -332,10 +332,13 @@ int CompassSensor::inv_init_sysfs_attributes(void)
     VFUNC_LOG;
 
     unsigned char i = 0;
-    char sysfs_path[MAX_SYSFS_NAME_LEN], iio_trigger_path[MAX_SYSFS_NAME_LEN], tbuf[2];
+    char sysfs_path[MAX_SYSFS_NAME_LEN], iio_trigger_path[MAX_SYSFS_NAME_LEN];
+#if defined COMPASS_AK8975
+    char tbuf[2];
+    int num;
+#endif
     char *sptr;
     char **dptr;
-    int num;
 
     pathP = (char*)malloc(
                     sizeof(char[COMPASS_MAX_SYSFS_ATTRB][MAX_SYSFS_NAME_LEN]));
