@@ -84,6 +84,8 @@ OVERRIDE_BUILT_MODULE_PATH := $(TARGET_OUT_INTERMEDIATE_LIBRARIES)
 LOCAL_STRIP_MODULE := true
 include $(BUILD_PREBUILT)
 
+# Experimental
+ifneq ($(BOARD_INV_LIBMLLITE_FROM_SOURCE),true)
 include $(CLEAR_VARS)
 LOCAL_MODULE := libmllite
 LOCAL_SRC_FILES := libmllite.so
@@ -95,3 +97,22 @@ LOCAL_MODULE_PATH := $(TARGET_OUT)/lib
 OVERRIDE_BUILT_MODULE_PATH := $(TARGET_OUT_INTERMEDIATE_LIBRARIES)
 LOCAL_STRIP_MODULE := true
 include $(BUILD_PREBUILT)
+else
+include $(CLEAR_VARS)
+LOCAL_CFLAGS += -DANDROID_JELLYBEAN
+LOCAL_CFLAGS += -DLINUX=1
+LOCAL_MODULE := libmllite
+LOCAL_SRC_FILES := $(sort $(patsubst $(LOCAL_PATH)/%,%,$(wildcard \
+    $(LOCAL_PATH)/software/core/mllite/*.c \
+    $(LOCAL_PATH)/software/core/mllite/linux/*.c \
+    software/core/mllite/*.c \
+    software/core/mllite/linux/*.c)))
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/software/core/mllite
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/software/core/mllite/linux
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/software/core/driver/include
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/software/core/driver/include/linux
+LOCAL_MODULE_OWNER := invensense
+LOCAL_MODULE_PATH := $(TARGET_OUT)/lib
+LOCAL_SHARED_LIBRARIES := liblog
+include $(BUILD_SHARED_LIBRARY)
+endif
