@@ -28,6 +28,7 @@ LOCAL_CLANG_CFLAGS += $(my_ignored_clang_warnings)
 LOCAL_MODULE := libinvensense_hal
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_OWNER := invensense
+LOCAL_LDFLAGS := -fuse-ld=gold
 
 LOCAL_CFLAGS := -DLOG_TAG=\"Sensors\" -Werror -Wall
 
